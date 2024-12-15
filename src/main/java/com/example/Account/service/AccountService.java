@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import static com.example.Account.type.AccountStatus.IN_USER;
 
@@ -65,4 +66,32 @@ public class AccountService {
 	}
 
 
+	@Transactional
+	public AccountDto deleteAccount(Long userId, String accountNumber) {
+		AccountUser accountUser = accountUserRepository.findById(userId)
+				.orElseThrow(() -> new AccountException(ErrorCode.USER_NOT_FOUND));
+		Account account = accountRepository.findByAccountNumber(accountNumber)
+				.orElseThrow(() -> new AccountException());
+
+		validateDeleteAccount(accountUser, account);
+
+		account.setAccountStatus(AccountStatus.UNREGISTERED);
+		account.setUnregisteredAt(LocalDateTime.now());
+
+		return AccountDto.fromEntity(account);
+	}
+
+	private void validateDeleteAccount(AccountUser accountUser, Account account) {
+		if (!Objects.equals(accountUser.getId(), account.getAccountUser().getId())) {
+			throw new AccountException(ErrorCode.USER_ACCOUNT_UN_MATCH);
+		}
+
+		if (account.getAccountStatus() == AccountStatus.UNREGISTERED) {
+			throw new AccountException(ErrorCode.ACCOUNT_ALREADY_UNREGISTERED);
+		}
+
+		if (account.getBalance() > 0) {
+			throw new AccountException(ErrorCode.BALANCE_NOT_EMPTY);
+		}
+	}
 }
