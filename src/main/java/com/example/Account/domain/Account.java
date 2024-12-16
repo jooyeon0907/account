@@ -28,7 +28,7 @@ public class Account {
 	private AccountUser accountUser;
 	private String accountNumber;
 
-	@Enumerated(EnumType.STRING) // enum 은 0, 1, 2, 3... 처럼 숫자로 저장되어 문자열로 (IN_USER, UNREGISTERED) 저장해주기 위함
+	@Enumerated(EnumType.STRING) // enum 은 0, 1, 2, 3... 처럼 숫자로 저장되어 문자열로 (IN_USE, UNREGISTERED) 저장해주기 위함
 	private AccountStatus accountStatus;
 	private Long balance;
 

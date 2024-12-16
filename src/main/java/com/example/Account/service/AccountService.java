@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static com.example.Account.type.AccountStatus.IN_USER;
+import static com.example.Account.type.AccountStatus.IN_USE;
 import static com.example.Account.type.ErrorCode.*;
 
 @Service
@@ -47,7 +47,7 @@ public class AccountService {
  		return AccountDto.fromEntity(
 				 accountRepository.save(Account.builder()
 						.accountUser(accountUser)
-						.accountStatus(IN_USER)
+						.accountStatus(IN_USE)
 						.accountNumber(newAccountNumber)
 						.balance(initialBalance)
 						.registeredAt(LocalDateTime.now())

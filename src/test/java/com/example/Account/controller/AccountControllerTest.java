@@ -7,14 +7,12 @@ import com.example.Account.dto.DeleteAccount;
 import com.example.Account.type.AccountStatus;
 import com.example.Account.service.AccountService;
 import com.example.Account.service.RedisTestService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
@@ -134,7 +132,7 @@ class AccountControllerTest {
 		given(accountService.getAccount(anyLong()))
 				.willReturn(Account.builder()
 						.accountNumber("3456")
-						.accountStatus(AccountStatus.IN_USER)
+						.accountStatus(AccountStatus.IN_USE)
 						.build());
 
 		// when
@@ -142,7 +140,7 @@ class AccountControllerTest {
 		mockMvc.perform(get("/account/876"))
 				.andDo(print())
 				.andExpect(jsonPath("$.accountNumber").value("3456"))
-				.andExpect(jsonPath("$.accountStatus").value("IN_USER"))
+				.andExpect(jsonPath("$.accountStatus").value("IN_USE"))
 				.andExpect(status().isOk());
 	}
 

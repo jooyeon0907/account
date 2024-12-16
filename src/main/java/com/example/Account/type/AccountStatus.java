@@ -1,6 +1,6 @@
 package com.example.Account.type;
 
 public enum AccountStatus {
-	IN_USER,
+	IN_USE,
 	UNREGISTERED
 }
