@@ -1,5 +1,5 @@
 package com.example.Account.type;
 
 public enum TransactionType {
-	USE, CANCLE
+	USE, CANCEL
 }

@@ -40,11 +40,18 @@ public class Account {
 	@LastModifiedDate // updatedAt 을 자동으로 저장 (EntityListeners 에 의해 활성화)
 	private LocalDateTime updatedAt;
 
-	public void useBalance(Long amount) { // // 중요한 데이터를 변경하는 로직은 객체 안에서 수행 할 수 있는게 더 안전함
+	public void useBalance(Long amount) { // 중요한 데이터를 변경하는 로직은 객체 안에서 수행 할 수 있는게 더 안전함
 		if (amount > balance) {
 			throw new AccountException(ErrorCode.AMOUNT_EXCEED_BALANCE);
 		}
 		balance -= amount;
+	}
+
+	public void cancelBalance(Long amount) {
+		if (amount < 0) {
+			throw new AccountException(ErrorCode.INVALID_REQUEST);
+		}
+		balance += amount;
 	}
 
 }
