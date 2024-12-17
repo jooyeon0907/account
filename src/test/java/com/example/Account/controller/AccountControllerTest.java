@@ -1,5 +1,6 @@
 package com.example.Account.controller;
 
+import com.example.Account.Exception.AccountException;
 import com.example.Account.domain.Account;
 import com.example.Account.dto.AccountDto;
 import com.example.Account.dto.CreateAccount;
@@ -7,6 +8,7 @@ import com.example.Account.dto.DeleteAccount;
 import com.example.Account.type.AccountStatus;
 import com.example.Account.service.AccountService;
 import com.example.Account.service.RedisTestService;
+import com.example.Account.type.ErrorCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,7 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -142,4 +145,18 @@ class AccountControllerTest {
 				.andExpect(status().isOk());
 	}
 
+	@Test
+	void fileGetAccount () throws Exception {
+		// given
+		given(accountService.getAccount(anyLong()))
+				.willThrow(new AccountException(ErrorCode.ACCOUNT_NOT_FOUND));
+
+		// when
+		// then
+		mockMvc.perform(get("/account/876"))
+				.andDo(print())
+				.andExpect(jsonPath("$.errorCode").value("ACCOUNT_NOT_FOUND"))
+				.andExpect(jsonPath("$.errorMessage").value("계좌가 없습니다"))
+				.andExpect(status().isOk());
+	}
 }
