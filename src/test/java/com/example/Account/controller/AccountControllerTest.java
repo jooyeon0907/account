@@ -119,8 +119,6 @@ class AccountControllerTest {
 				.andExpect(jsonPath("$[2].balance").value(3000))
 		;
 
-
-
 		// then
 	}
 
