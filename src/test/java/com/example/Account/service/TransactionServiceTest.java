@@ -54,7 +54,8 @@ class TransactionServiceTest {
 	@Test
 	void successUseBalance() {
 		// given
-		AccountUser user = AccountUser.builder().id(12L).name("Pobi").build();
+		AccountUser user = AccountUser.builder().name("Pobi").build();
+		user.setId(12L);
 
 		Account account = Account.builder()
 				.accountUser(user)
@@ -113,7 +114,8 @@ class TransactionServiceTest {
 	@DisplayName("해당 계좌 없음 - 잔액 사용 실패")
 	void useBalance_AccountNotFound() {
 		// given
-		AccountUser user = AccountUser.builder().id(12L).name("Pobi").build();
+		AccountUser user = AccountUser.builder().name("Pobi").build();
+		user.setId(12L);
 
 		given(accountUserRepository.findById(anyLong()))
 				.willReturn(Optional.of(user));
@@ -133,8 +135,10 @@ class TransactionServiceTest {
 	@DisplayName("계좌 소유주 다름 - 잔액 사용 실패")
 	void useBalance_userUnMatch() {
 		// given
-		AccountUser pobi = AccountUser.builder().id(12L).name("Pobi").build();
-		AccountUser harry = AccountUser.builder().id(13L).name("Harry").build();
+		AccountUser pobi = AccountUser.builder().name("Pobi").build();
+		pobi.setId(12L);
+		AccountUser harry = AccountUser.builder().name("Harry").build();
+		harry.setId(13L);
 
 		given(accountUserRepository.findById(anyLong()))
 				.willReturn(Optional.of(pobi));
@@ -156,7 +160,8 @@ class TransactionServiceTest {
 	@DisplayName("해지 계좌는 해지할 수 없다")
 	void useBalance_alreadyUnRegistered() {
 		// given
-		AccountUser pobi = AccountUser.builder().id(12L).name("Pobi").build();
+		AccountUser pobi = AccountUser.builder().name("Pobi").build();
+		pobi.setId(12L);
 
 		given(accountUserRepository.findById(anyLong()))
 				.willReturn(Optional.of(pobi));
@@ -180,7 +185,8 @@ class TransactionServiceTest {
 	@DisplayName("거래 금액이 잔액보다 큰 경우")
 	void exceedAmount_UseBalance() {
 		// given
-		AccountUser user = AccountUser.builder().id(12L).name("Pobi").build();
+		AccountUser user = AccountUser.builder().name("Pobi").build();
+		user.setId(12L);
 
 		given(accountUserRepository.findById(anyLong()))
 				.willReturn(Optional.of(user));
@@ -208,7 +214,9 @@ class TransactionServiceTest {
 	@DisplayName("실패 트랜잭션 저장 성공")
 	void saveFailedUseTransaction() {
 		// given
-		AccountUser user = AccountUser.builder().id(12L).name("Pobi").build();
+		AccountUser user = AccountUser.builder().name("Pobi").build();
+		user.setId(12L);
+
 
 		Account account = Account.builder()
 				.accountUser(user)
@@ -244,7 +252,9 @@ class TransactionServiceTest {
 	@Test
 	void successCancelBalance() {
 		// given
-		AccountUser user = AccountUser.builder().id(12L).name("Pobi").build();
+		AccountUser user = AccountUser.builder().name("Pobi").build();
+		user.setId(12L);
+
 
 		Account account = Account.builder()
 				.accountUser(user)
@@ -332,21 +342,22 @@ class TransactionServiceTest {
 	@Test
 	@DisplayName("거래와 계좌가 매칭 실패 - 잔액 사용 취소 실패")
 	void cancelTransaction_TransactionAccountUnMatch() {
-		AccountUser user = AccountUser.builder().id(12L).name("Pobi").build();
+		AccountUser user = AccountUser.builder().name("Pobi").build();
+		user.setId(12L);
 
 		Account account = Account.builder()
-				.id(1L)
 				.accountUser(user)
 				.accountStatus(IN_USE)
 				.balance(10000L)
 				.accountNumber("1000000012").build();
+		account.setId(1L);
 
 		Account accountNotUse = Account.builder()
-				.id(2L)
 				.accountUser(user)
 				.accountStatus(IN_USE)
 				.balance(10000L)
 				.accountNumber("1000000013").build();
+		accountNotUse.setId(2L);
 
 		Transaction transaction = Transaction.builder()
 						.account(account)
@@ -379,14 +390,15 @@ class TransactionServiceTest {
 	@Test
 	@DisplayName("거래 금액과 최소 금액이 다름 - 잔액 사용 취소 실패")
 	void cancelTransaction_CancelMustFully() {
-		AccountUser user = AccountUser.builder().id(12L).name("Pobi").build();
+		AccountUser user = AccountUser.builder().name("Pobi").build();
+		user.setId(12L);
 
 		Account account = Account.builder()
-				.id(1L)
 				.accountUser(user)
 				.accountStatus(IN_USE)
 				.balance(10000L)
 				.accountNumber("1000000012").build();
+		account.setId(1L);
 
 		Transaction transaction = Transaction.builder()
 						.account(account)
@@ -420,14 +432,15 @@ class TransactionServiceTest {
 	@Test
 	@DisplayName("취소는 1년까지만 가능 - 잔액 사용 취소 실패")
 	void cancelTransaction_TooOldOrderTOCancel() {
-		AccountUser user = AccountUser.builder().id(12L).name("Pobi").build();
+		AccountUser user = AccountUser.builder().name("Pobi").build();
+		user.setId(12L);
 
 		Account account = Account.builder()
-				.id(1L)
 				.accountUser(user)
 				.accountStatus(IN_USE)
 				.balance(10000L)
 				.accountNumber("1000000012").build();
+		account.setId(1L);
 
 		Transaction transaction = Transaction.builder()
 						.account(account)
@@ -460,14 +473,15 @@ class TransactionServiceTest {
 	@Test
 	void successQueryTranaction() {
 		// given
-		AccountUser user = AccountUser.builder().id(12L).name("Pobi").build();
+		AccountUser user = AccountUser.builder().name("Pobi").build();
+		user.setId(12L);
 
 		Account account = Account.builder()
-				.id(1L)
 				.accountUser(user)
 				.accountStatus(IN_USE)
 				.balance(10000L)
 				.accountNumber("1000000012").build();
+		account.setId(1L);
 
 		Transaction transaction = Transaction.builder()
 						.account(account)

@@ -44,7 +44,8 @@ class AccountServiceTest {
 	@Test
 	void createAccountSuccess() { // 기존 계좌가 있는 유저가 새로운 계좌를 생성하는 경우
 		// given
-		AccountUser user = AccountUser.builder().id(12L).name("Pobi").build();
+		AccountUser user = AccountUser.builder().name("Pobi").build();
+		user.setId(12L);
 
 		given(accountUserRepository.findById(anyLong()))
 				.willReturn(Optional.of(user));
@@ -71,7 +72,8 @@ class AccountServiceTest {
 	@Test
 	void createFirstAccount() { // 계좌를 처음 생성하는경우
 		// given
-		AccountUser user = AccountUser.builder().id(15L).name("Pobi").build();
+		AccountUser user = AccountUser.builder().name("Pobi").build();
+		user.setId(15L);
 
 		given(accountUserRepository.findById(anyLong()))
 				.willReturn(Optional.of(user));
@@ -114,7 +116,8 @@ class AccountServiceTest {
 	@DisplayName("유저 당 최대 계좌는 10개")
 	void createAccount_maxAccountIs10() {
 		// given
-		AccountUser user = AccountUser.builder().id(15L).name("Pobi").build();
+		AccountUser user = AccountUser.builder().name("Pobi").build();
+		user.setId(12L);
 
 		given(accountUserRepository.findById(anyLong()))
 				.willReturn(Optional.of(user));
@@ -132,7 +135,8 @@ class AccountServiceTest {
 	@Test
 	void deleteAccountSuccess() {
 		// given
-		AccountUser user = AccountUser.builder().id(12L).name("Pobi").build();
+		AccountUser user = AccountUser.builder().name("Pobi").build();
+		user.setId(12L);
 
 		given(accountUserRepository.findById(anyLong()))
 				.willReturn(Optional.of(user));
@@ -174,7 +178,8 @@ class AccountServiceTest {
 	@DisplayName("해당 계좌 없음 - 계좌 해지 실패")
 	void deleteAccount_AccountNotFound() {
 		// given
-		AccountUser user = AccountUser.builder().id(12L).name("Pobi").build();
+		AccountUser user = AccountUser.builder().name("Pobi").build();
+		user.setId(12L);
 
 		given(accountUserRepository.findById(anyLong()))
 				.willReturn(Optional.of(user));
@@ -194,8 +199,10 @@ class AccountServiceTest {
 	@DisplayName("계좌 소유주 다름")
 	void deleteAccountFailed_userUnMatch() {
 		// given
-		AccountUser pobi = AccountUser.builder().id(12L).name("Pobi").build();
-		AccountUser harry = AccountUser.builder().id(13L).name("Harry").build();
+		AccountUser pobi = AccountUser.builder().name("Pobi").build();
+		pobi.setId(12L);
+		AccountUser harry = AccountUser.builder().name("Harry").build();
+		harry.setId(13L);
 
 		given(accountUserRepository.findById(anyLong()))
 				.willReturn(Optional.of(pobi));
@@ -217,7 +224,8 @@ class AccountServiceTest {
 	@DisplayName("해지 계좌는 잔액이 없어야 한다.")
 	void deleteAccountFailed_balanceNotEmpty() {
 		// given
-		AccountUser pobi = AccountUser.builder().id(12L).name("Pobi").build();
+		AccountUser pobi = AccountUser.builder().name("Pobi").build();
+		pobi.setId(12L);
 
 		given(accountUserRepository.findById(anyLong()))
 				.willReturn(Optional.of(pobi));
@@ -240,7 +248,8 @@ class AccountServiceTest {
 	@DisplayName("해지 계좌는 해지할 수 없다")
 	void deleteAccountFailed_alreadyUnRegistered() {
 		// given
-		AccountUser pobi = AccountUser.builder().id(12L).name("Pobi").build();
+		AccountUser pobi = AccountUser.builder().name("Pobi").build();
+		pobi.setId(12L);
 
 		given(accountUserRepository.findById(anyLong()))
 				.willReturn(Optional.of(pobi));
@@ -263,7 +272,8 @@ class AccountServiceTest {
 	@Test
 	void successGetAccountsByUserId() {
 		// given
-		AccountUser pobi = AccountUser.builder().id(12L).name("Pobi").build();
+		AccountUser pobi = AccountUser.builder().name("Pobi").build();
+		pobi.setId(12L);
 
 		List<Account> accounts = Arrays.asList(
 				Account.builder()

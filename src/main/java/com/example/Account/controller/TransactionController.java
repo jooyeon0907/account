@@ -29,7 +29,6 @@ public class TransactionController {
 	) throws InterruptedException {
 
 		try{
-			Thread.sleep(5000);
 			return UseBalance.Response.from(
 					transactionService.useBalance(
 							request.getUserId(),
