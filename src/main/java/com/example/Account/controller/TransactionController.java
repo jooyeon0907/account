@@ -55,7 +55,7 @@ public class TransactionController {
 		try{
 			return CancelBalance.Response.from(
 					transactionService.cancelBalance(
-							request.getTransactionID(),
+							request.getTransactionId(),
 							request.getAccountNumber(),
 							request.getAmount()
 					)

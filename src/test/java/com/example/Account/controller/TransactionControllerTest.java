@@ -1,10 +1,9 @@
 package com.example.Account.controller;
 
+import com.example.Account.dto.CancelBalance;
 import com.example.Account.dto.TransactionDto;
 import com.example.Account.dto.UseBalance;
 import com.example.Account.service.TransactionService;
-import com.example.Account.type.TransactionRequestType;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,6 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -67,6 +65,33 @@ class TransactionControllerTest {
 	}
 
 
+	@Test
+	void successCancelBalance() throws Exception {
+		// given
+		given(transactionService.cancelBalance(anyString(), anyString(), anyLong()))
+				.willReturn(TransactionDto.builder()
+						.accountNumber("1000000000")
+						.transactedAt(LocalDateTime.now())
+						.amount(54321L)
+						.transactionId("transactionIdForCancel")
+						.transactionRequestType(S)
+						.build());
+
+		// when
+		// then
+		mockMvc.perform(post("/transaction/cancel")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(
+						new CancelBalance.Request("transactionId", "2000000000", 3000L)
+				))
+			).andDo(print())
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.accountNumber").value("1000000000"))
+			.andExpect(jsonPath("$.transactionResult").value("S"))
+			.andExpect(jsonPath("$.transactionId").value("transactionIdForCancel"))
+			.andExpect(jsonPath("$.amount").value(54321L))
+		;
+	}
 
 
 }
